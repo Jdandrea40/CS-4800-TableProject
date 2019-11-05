@@ -8,11 +8,11 @@ public class GlassMover : MonoBehaviour
     Rigidbody2D rb2d;
     bool goUp = false;
     bool goDown = false;
+    
     // Start is called before the first frame update
     void Start()
     {
-        rb2d = GetComponent<Rigidbody2D>();
-        
+        rb2d = GetComponent<Rigidbody2D>();        
     }
 
     // Update is called once per frame
@@ -22,11 +22,22 @@ public class GlassMover : MonoBehaviour
         {
             goDown = false;
             goUp = true;
+
+            //foreach (TrailRenderer trail in trails)
+            //{
+
+            //    trail.startColor = new Color(Random.Range(0, 200), Random.Range(0, 200), Random.Range(0, 200));
+            //    Debug.Log(trail.colorGradient.ToString());
+            //}
         }
         if (Input.GetKey(KeyCode.X))
         {
             goUp = false;
             goDown = true;
+        //    foreach (TrailRenderer trail in trails)
+        //    {
+        //        trail.endColor = new Color(Random.Range(0, 200), Random.Range(0, 200), Random.Range(0, 200));
+        //    }
         }
 
         if (goUp)

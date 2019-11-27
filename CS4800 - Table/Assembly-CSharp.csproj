@@ -64,6 +64,7 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\FlyCamera.cs" />
     <Compile Include="Assets\Scripts\GlassMover.cs" />
+    <Compile Include="Assets\Scripts\Manager.cs" />
     <Compile Include="Assets\Scripts\PinBehavior.cs" />
     <Compile Include="Assets\Scripts\PinBehavior2.cs" />
     <Compile Include="Assets\Scripts\PullForce.cs" />

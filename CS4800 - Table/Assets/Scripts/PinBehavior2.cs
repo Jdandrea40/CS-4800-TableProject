@@ -8,13 +8,21 @@ public class PinBehavior2 : MonoBehaviour
     Rigidbody rb;
     Vector3 collisionVector;
     bool rotate = false;
-    bool shrink = true;
-    [SerializeField]
-    float scaleFactor = 2;
 
+    [SerializeField]
+    GameObject[] shatterPieces = new GameObject[10];
+    Rigidbody[] shatterPiecesRB = new Rigidbody[10];
+    
     // Start is called before the first frame update
     void Start()
     {
+        
+        for (int i = 0; i < shatterPieces.Length; i++)
+        {
+            //shatterPieces[i] = GetComponent<GameObject>();
+            shatterPiecesRB[i] = shatterPieces[i].GetComponentInChildren<Rigidbody>();
+            
+        }
         parts = GetComponentInChildren<ParticleSystem>();
         rb = GetComponent<Rigidbody>();
         parts.Stop();
@@ -25,28 +33,15 @@ public class PinBehavior2 : MonoBehaviour
     {
         if (rotate)
         {
-            transform.Rotate(collisionVector);
+            for (int i = 0; i < shatterPieces.Length; i++)
+            {               
+                shatterPieces[i].transform.Rotate(collisionVector);
+            }           
         }
-        else
+
+        if (Input.GetKeyDown(KeyCode.E))
         {
-            transform.Rotate(0, 5, 0);
-            if (shrink)
-            {
-                transform.localScale = new Vector3(transform.localScale.x - scaleFactor, transform.localScale.y - scaleFactor, transform.localScale.z - scaleFactor);
-                if (transform.localScale.x <= 10)
-                {
-                    shrink = false;
-                }
-            }
-            else
-            {
-                transform.localScale = new Vector3(transform.localScale.x + scaleFactor, transform.localScale.y + scaleFactor, transform.localScale.z + scaleFactor);
-                if (transform.localScale.x >= 100)
-                {
-                    shrink = true;
-                }
-            }
-            //StartCoroutine(Scale());
+            ExplodeAll();
         }
     }
 
@@ -54,46 +49,28 @@ public class PinBehavior2 : MonoBehaviour
     {
         if (coll.gameObject.layer == 8)
         {
-            parts.Play();
-            collisionVector = (transform.position - coll.transform.position).normalized;           
-            rb.AddForce(collisionVector * 10, ForceMode.Impulse);
+            collisionVector = (transform.position - coll.transform.position).normalized;
+            for (int i = 0; i < shatterPiecesRB.Length; i++)
+            {
+                parts.Play();
+                shatterPiecesRB[i].AddForce(new Vector3(Random.Range(-50, 50), Random.Range(-50, 50), Random.Range(-50, 50)), ForceMode.Impulse);
+                gameObject.GetComponent<BoxCollider>().enabled = false;
+            }
+
             rotate = true;
         }
     }
 
-    //IEnumerator Scale()
-    //{
-    //    bool shrink = true;
-    //    while (!rotate)
-    //    {
-    //        if (shrink)
-    //        {
-    //            while (shrink)
-    //            {
-    //                transform.localScale = new Vector3(transform.localScale.x - 1, transform.localScale.y - 1, transform.localScale.z - 1);
-    //                yield return new WaitForSeconds(1);
-    //                if (transform.localScale.x == 1)
-    //                {
-    //                    shrink = false;
-    //                    Debug.Log("Ling");
-    //                }
-    //            }
-    //        }
-    //        else if (!shrink)
-    //        {
-    //            while (!shrink)
-    //            {
-    //                transform.localScale = new Vector3(transform.localScale.x + 1, transform.localScale.y + 1, transform.localScale.z + 1);
-    //                yield return new WaitForSeconds(1);
-    //                if (transform.localScale.x == 10)
-    //                {
-    //                    Debug.Log("Biing");
-    //                    shrink = true;
-    //                }
-    //            }
-    //        }
-    //    }
+    void ExplodeAll()
+    {
+        for (int i = 0; i < shatterPiecesRB.Length; i++)
+        {
+            parts.Play();
+            shatterPiecesRB[i].AddForce(new Vector3(Random.Range(-50, 50), Random.Range(-50, 50), Random.Range(-50, 50)), ForceMode.Impulse);
+            gameObject.GetComponent<BoxCollider>().enabled = false;
+            collisionVector = new Vector3(Random.Range(-50, 50), Random.Range(-50, 50), Random.Range(-50, 50));
+        }
+        rotate = true;
         
-    //}
-
+    }
 }

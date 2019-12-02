@@ -5,6 +5,9 @@ using UnityEngine;
 public class PinBehavior2 : MonoBehaviour
 {
     ParticleSystem parts;
+    AudioSource audio;
+    [SerializeField]
+    AudioClip explode;
     Rigidbody rb;
     Vector3 collisionVector;
     bool rotate = false;
@@ -16,7 +19,7 @@ public class PinBehavior2 : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        audio = GetComponent<AudioSource>();
         for (int i = 0; i < shatterPieces.Length; i++)
         {
             //shatterPieces[i] = GetComponent<GameObject>();
@@ -52,11 +55,12 @@ public class PinBehavior2 : MonoBehaviour
             collisionVector = (transform.position - coll.transform.position).normalized;
             for (int i = 0; i < shatterPiecesRB.Length; i++)
             {
-                parts.Play();
+                
                 shatterPiecesRB[i].AddForce(new Vector3(Random.Range(-50, 50), Random.Range(-50, 50), Random.Range(-50, 50)), ForceMode.Impulse);
                 gameObject.GetComponent<BoxCollider>().enabled = false;
             }
-
+            parts.Play();
+            audio.PlayOneShot(explode);
             rotate = true;
         }
     }
@@ -66,6 +70,7 @@ public class PinBehavior2 : MonoBehaviour
         for (int i = 0; i < shatterPiecesRB.Length; i++)
         {
             parts.Play();
+            audio.PlayOneShot(explode);
             shatterPiecesRB[i].AddForce(new Vector3(Random.Range(-50, 50), Random.Range(-50, 50), Random.Range(-50, 50)), ForceMode.Impulse);
             gameObject.GetComponent<BoxCollider>().enabled = false;
             collisionVector = new Vector3(Random.Range(-50, 50), Random.Range(-50, 50), Random.Range(-50, 50));

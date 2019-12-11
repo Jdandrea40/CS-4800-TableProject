@@ -15,6 +15,7 @@ public class PinBehavior2 : MonoBehaviour
     [SerializeField]
     GameObject[] shatterPieces = new GameObject[10];
     Rigidbody[] shatterPiecesRB = new Rigidbody[10];
+    Renderer[] shatterRenders = new Renderer[10];
     
     // Start is called before the first frame update
     void Start()
@@ -24,6 +25,7 @@ public class PinBehavior2 : MonoBehaviour
         {
             //shatterPieces[i] = GetComponent<GameObject>();
             shatterPiecesRB[i] = shatterPieces[i].GetComponentInChildren<Rigidbody>();
+            shatterRenders[i] = shatterPieces[i].GetComponentInChildren<Renderer>();
             
         }
         parts = GetComponentInChildren<ParticleSystem>();
@@ -72,6 +74,7 @@ public class PinBehavior2 : MonoBehaviour
             parts.Play();
             audio.PlayOneShot(explode);
             shatterPiecesRB[i].AddForce(new Vector3(Random.Range(-50, 50), Random.Range(-50, 50), Random.Range(-50, 50)), ForceMode.Impulse);
+            
             gameObject.GetComponent<BoxCollider>().enabled = false;
             collisionVector = new Vector3(Random.Range(-50, 50), Random.Range(-50, 50), Random.Range(-50, 50));
         }
